@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text("Home Screen"),
       ),
       body: BlocConsumer<HomeViewModel,HomeState>(
         bloc: homeViewModel,
@@ -41,8 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return _buildLoadingState(state);
             }
             default:{
-              throw Exception("Illegal state Exception "
-                  "listener should handle this case");
+              throw Exception("Unknown state");
             }
           }
         },
@@ -110,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildErrorState(HomeErrorState state) {
-    return Text(state.message ?? "");
+    return Text(state.message ?? "Something went Wrong");
   }
 
   Widget _buildLoadingState(HomeInitialState state) {
