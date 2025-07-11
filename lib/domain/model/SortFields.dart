@@ -4,5 +4,7 @@ enum SortFields{
   @JsonValue("price")
   price,
   @JsonValue("createdAt")
-  newest
+  newest,
+  @JsonValue("-sold")
+  mostSelling
 }
