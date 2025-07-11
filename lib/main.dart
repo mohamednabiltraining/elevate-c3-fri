@@ -1,10 +1,21 @@
 import 'package:c3_offline/di.dart';
+import 'package:c3_offline/domain/model/product.dart';
 import 'package:c3_offline/presentation/CusomBloclObserver.dart';
 import 'package:c3_offline/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main(){
+
+  Product p1 = new Product(id: "10" ,title: "iphone");
+  Product p2 = new Product(id: "10" ,title: "iphone");
+  Product p3 = p1;// shallow copy
+  Product p4 = p2.copyWith();// deep copy
+
+  print(p1 == p2);
+
+  print(p1 == p3);
+
   Bloc.observer = MyBlocObserver();
   configureDependencies();
   runApp(const MyApp());

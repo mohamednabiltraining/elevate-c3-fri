@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    homeViewModel.add(HomeRefreshEvent());
+    homeViewModel.doIntent(HomeRefreshIntent());
   }
   @override
   Widget build(BuildContext context) {

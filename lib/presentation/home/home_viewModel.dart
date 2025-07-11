@@ -8,7 +8,7 @@ import 'package:c3_offline/domain/usecase/GetProductsByCategoryId.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class HomeViewModel extends Bloc<HomeEvent,HomeState>{
+class HomeViewModel extends Cubit<HomeState> {
   GetCategoriesUseCase getCategoriesUseCase;
   GetProductsByCategoryIdUseCase getProductsByCategoryIdUseCase;
   GetNewArrivalsUseCase getNewArrivalsUseCase;
@@ -16,61 +16,62 @@ class HomeViewModel extends Bloc<HomeEvent,HomeState>{
 
   HomeSuccessState state = HomeSuccessState();
 
-  HomeViewModel(this.getCategoriesUseCase,
-      this.getProductsByCategoryIdUseCase,
-      this.getNewArrivalsUseCase,
-      this.getMostSellingProducts,
-      ):super(HomeInitialState()){
-    on<HomeEvent>(_doEvent);
-  }
+  HomeViewModel(
+    this.getCategoriesUseCase,
+    this.getProductsByCategoryIdUseCase,
+    this.getNewArrivalsUseCase,
+    this.getMostSellingProducts,
+  ) : super(HomeInitialState()) {}
 
-  void _doEvent(HomeEvent event,Emitter<HomeState> emit)async{
-    switch(event){
-      case HomeRefreshEvent():
-       await _loadHome(emit);
-        break;
-      case OnProductClick():
-        break;
-        case OnCategoryClick():
-        break;
+  void doIntent(HomeIntent intent) {
+    switch (intent) {
+      case HomeRefreshIntent():
+        {
+          _loadHome();
+          break;
+        }
+      case OnProductClickIntent():
+        {}
+      case OnCategoryClickIntent():
+        {}
     }
   }
 
-  Future<void> _loadHome(Emitter<HomeState> emit)async{
+  Future<void> _loadHome() async {
     try {
       var categories = await _loadCategories();
       var mostSelling = await _loadMostSelling();
       var newArrivals = await _loadNewArrivals();
-      emit(state.copyWith(categories: categories,
+      emit(state.copyWith(
+          categories: categories,
           mostSelling: mostSelling,
-      newArrivals: newArrivals));
-    }catch(ex){
+          newArrivals: newArrivals));
+    } catch (ex) {
       emit(HomeErrorState(message: ex.toString()));
     }
   }
 
-  Future<List<Category>> _loadCategories()async{
+  Future<List<Category>> _loadCategories() async {
     var categories = await getCategoriesUseCase.invoke();
     return categories;
   }
 
-  Future<List<Product>> _loadNewArrivals()async {
+  Future<List<Product>> _loadNewArrivals() async {
     var newArrivals = await getNewArrivalsUseCase.invoke();
     return newArrivals;
-
   }
 
-  Future<List<Product>>  _loadMostSelling() async{
+  Future<List<Product>> _loadMostSelling() async {
     var mostSelling = await getMostSellingProducts.invoke();
     return mostSelling;
-
   }
-
 }
 
-sealed class HomeState{}
-class HomeInitialState extends HomeState{}
-class HomeSuccessState extends HomeState{
+sealed class HomeState {}
+
+class HomeInitialState extends HomeState {}
+
+class HomeSuccessState extends HomeState {
   final List<Category>? categories;
   final List<Product>? newArrivals;
   final List<Product>? mostSelling;
@@ -84,7 +85,7 @@ class HomeSuccessState extends HomeState{
     List<Category>? categories,
     List<Product>? newArrivals,
     List<Product>? mostSelling,
-  }){
+  }) {
     return HomeSuccessState(
       categories: categories ?? this.categories,
       newArrivals: newArrivals ?? this.newArrivals,
@@ -92,22 +93,27 @@ class HomeSuccessState extends HomeState{
     );
   }
 }
-class HomeErrorState extends HomeState{
+
+class HomeErrorState extends HomeState {
   final String? message;
   HomeErrorState({this.message});
 }
-class ShowDialog extends HomeState{
+
+class ShowDialog extends HomeState {
   String message;
   ShowDialog(this.message);
 }
 
-sealed class HomeEvent{}
-class HomeRefreshEvent extends HomeEvent{}
-class OnProductClick extends HomeEvent{
+sealed class HomeIntent {}
+
+class HomeRefreshIntent extends HomeIntent {}
+
+class OnProductClickIntent extends HomeIntent {
   final Product product;
-  OnProductClick(this.product);
+  OnProductClickIntent(this.product);
 }
-class OnCategoryClick extends HomeEvent{
+
+class OnCategoryClickIntent extends HomeIntent {
   final Category category;
-  OnCategoryClick(this.category);
+  OnCategoryClickIntent(this.category);
 }

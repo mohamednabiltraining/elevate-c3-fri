@@ -40,6 +40,14 @@ class Product {
     this.updatedAt,
     this.id,
   });
+
+  Product copyWith({String? id, String? title}) {
+    return Product(
+      id: id ?? this.id,
+      title: title ?? this.title,
+    );
+
+  }
 }
 
 
