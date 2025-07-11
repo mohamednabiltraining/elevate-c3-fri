@@ -7,7 +7,7 @@ import 'package:c3_offline/domain/usecase/GetProductsByCategoryId.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class HomeViewModel extends Bloc<HomeEvent,HomeState>{
+class HomeViewModel extends Cubit<HomeState>{
   GetCategoriesUseCase getCategoriesUseCase;
   GetProductsByCategoryIdUseCase getProductsByCategoryIdUseCase;
   GetNewArrivalsUseCase getNewArrivalsUseCase;
@@ -18,22 +18,24 @@ class HomeViewModel extends Bloc<HomeEvent,HomeState>{
       this.getProductsByCategoryIdUseCase,
       this.getNewArrivalsUseCase
       ):super(HomeInitialState()){
-    on<HomeEvent>(_mapEventToState);
   }
 
-  _mapEventToState(HomeEvent event,Emitter<HomeState> emit)async{
-    switch(event){
-      case HomeRefreshEvent():
-       await _loadHome(emit);
-        break;
-      case OnProductClick():
-        break;
-        case OnCategoryClick():
-        break;
+  void doIntent(HomeIntent intent){
+    switch(intent) {
+      case HomeRefreshIntent():
+        { _loadHome();
+          break;
+        }
+        case OnProductClickIntent():{
+
+        }
+      case OnCategoryClickIntent():{
+
+      }
+
     }
   }
-
-  Future<void> _loadHome(Emitter<HomeState> emit)async{
+  Future<void> _loadHome()async{
     try {
       var categories = await getCategoriesUseCase.invoke();
       var mostSelling = await getNewArrivalsUseCase.invoke();
@@ -88,13 +90,13 @@ class ShowDialog extends HomeState{
   ShowDialog(this.message);
 }
 
-sealed class HomeEvent{}
-class HomeRefreshEvent extends HomeEvent{}
-class OnProductClick extends HomeEvent{
+sealed class HomeIntent{}
+class HomeRefreshIntent extends HomeIntent{}
+class OnProductClickIntent extends HomeIntent{
   final Product product;
-  OnProductClick(this.product);
+  OnProductClickIntent(this.product);
 }
-class OnCategoryClick extends HomeEvent{
+class OnCategoryClickIntent extends HomeIntent{
   final Category category;
-  OnCategoryClick(this.category);
+  OnCategoryClickIntent(this.category);
 }
