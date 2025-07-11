@@ -29,7 +29,7 @@ import 'domain/respositories/ProductsRepo.dart' as _i583;
 import 'domain/usecase/GetCategoriesUseCase.dart' as _i517;
 import 'domain/usecase/GetNewArrivalProducts.dart' as _i712;
 import 'domain/usecase/GetProductsByCategoryId.dart' as _i700;
-import 'presentation/home_viewModel.dart' as _i306;
+import 'presentation/home/home_viewModel.dart' as _i964;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -59,12 +59,15 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i455.CategoriesRepoImpl(gh<_i903.CategoriesRemoteDataSource>()));
     gh.factory<_i517.GetCategoriesUseCase>(
         () => _i517.GetCategoriesUseCase(gh<_i90.Categoriesrepo>()));
-    gh.factory<_i712.GetProductsByCategoryId>(
-        () => _i712.GetProductsByCategoryId(gh<_i583.ProductsRepo>()));
+    gh.factory<_i712.GetNewArrivalsUseCase>(
+        () => _i712.GetNewArrivalsUseCase(gh<_i583.ProductsRepo>()));
     gh.factory<_i700.GetProductsByCategoryIdUseCase>(
         () => _i700.GetProductsByCategoryIdUseCase(gh<_i583.ProductsRepo>()));
-    gh.factory<_i306.HomeViewModel>(
-        () => _i306.HomeViewModel(gh<_i517.GetCategoriesUseCase>()));
+    gh.factory<_i964.HomeViewModel>(() => _i964.HomeViewModel(
+          gh<_i517.GetCategoriesUseCase>(),
+          gh<_i700.GetProductsByCategoryIdUseCase>(),
+          gh<_i712.GetNewArrivalsUseCase>(),
+        ));
     return this;
   }
 }

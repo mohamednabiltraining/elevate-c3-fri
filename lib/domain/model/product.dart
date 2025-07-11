@@ -14,7 +14,7 @@ class Product {
   final int? quantity;
   final int? price;
   final String? imageCover;
-  final Category? category;x
+  final Category? category;
   final Brand? brand;
   final double? ratingsAverage;
   final String? createdAt;
