@@ -1,8 +1,11 @@
 import 'package:c3_offline/di.dart';
-import 'package:c3_offline/presentation/home_screen.dart';
+import 'package:c3_offline/presentation/CusomBloclObserver.dart';
+import 'package:c3_offline/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main(){
+  Bloc.observer = MyBlocObserver();
   configureDependencies();
   runApp(const MyApp());
 }

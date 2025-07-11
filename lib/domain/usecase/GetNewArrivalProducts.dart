@@ -4,10 +4,10 @@ import 'package:c3_offline/domain/respositories/ProductsRepo.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class GetProductsByCategoryId {
+class GetNewArrivalsUseCase {
   ProductsRepo _repo;
 
-  GetProductsByCategoryId(this._repo);
+  GetNewArrivalsUseCase(this._repo);
 
   Future<List<Product>> invoke({
     int limit = 10,

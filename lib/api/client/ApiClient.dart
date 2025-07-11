@@ -1,6 +1,3 @@
-
-
-
 import 'package:c3_offline/api/response/brands_response.dart';
 import 'package:c3_offline/api/response/categories_response.dart';
 import 'package:c3_offline/api/response/products_response.dart';
