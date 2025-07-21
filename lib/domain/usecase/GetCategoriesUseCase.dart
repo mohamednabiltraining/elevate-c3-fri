@@ -1,3 +1,4 @@
+import 'package:c3_offline/api/client/api_result.dart';
 import 'package:c3_offline/domain/model/category.dart';
 import 'package:c3_offline/domain/respositories/CategoriesRepo.dart';
 import 'package:injectable/injectable.dart';
@@ -7,7 +8,7 @@ class GetCategoriesUseCase {
   Categoriesrepo _repo;
   GetCategoriesUseCase(this._repo);
 
-  Future<List<Category>> invoke({
+  Future<Result<List<Category>>> invoke({
     int limit = 10,
     int page = 1,
     String? keyword

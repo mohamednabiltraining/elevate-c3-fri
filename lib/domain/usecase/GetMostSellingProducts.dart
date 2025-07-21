@@ -1,3 +1,4 @@
+import 'package:c3_offline/api/client/api_result.dart';
 import 'package:c3_offline/domain/model/SortFields.dart';
 import 'package:c3_offline/domain/model/product.dart';
 import 'package:c3_offline/domain/respositories/ProductsRepo.dart';
@@ -9,7 +10,7 @@ class GetMostSellingProducts {
 
   GetMostSellingProducts(this._repo);
 
-  Future<List<Product>> invoke({
+  Future<Result<List<Product>>> invoke({
     int limit = 10,
     int page = 1,
   }){

@@ -1,4 +1,5 @@
 import 'package:c3_offline/api/client/ApiClient.dart';
+import 'package:c3_offline/api/client/api_result.dart';
 import 'package:c3_offline/data/dataSource/BrandsRemoteDataSource.dart';
 import 'package:c3_offline/domain/model/brand.dart';
 import 'package:injectable/injectable.dart';
@@ -9,16 +10,19 @@ class BrandsRemoteDataSourceImpl implements BrandsRemoteDataSource {
   BrandsRemoteDataSourceImpl(this._client);
 
   @override
-  Future<List<Brand>> getBrands({
+  Future<Result<List<Brand>>> getBrands({
     int limit = 10,
     int page = 1,
     String? keyword
   }) async {
-    var response = await _client.getBrands(
-      limit: limit,
-      page: page,
-      keyword: keyword
-    );
-    return response.data?.map((dto) => dto.toBrand()).toList() ?? [];
+    return executeApi(() async {
+      var response = await _client.getBrands(
+          limit: limit,
+          page: page,
+          keyword: keyword
+      );
+      return response.data?.map((dto) => dto.toBrand()).toList() ?? [];
+    });
+
   }
 }

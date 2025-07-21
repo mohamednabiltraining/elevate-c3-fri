@@ -33,45 +33,53 @@ import 'domain/usecase/GetProductsByCategoryId.dart' as _i700;
 import 'presentation/home/home_viewModel.dart' as _i964;
 
 extension GetItInjectableX on _i174.GetIt {
-// initializes the registration of main-scope dependencies inside of GetIt
+  // initializes the registration of main-scope dependencies inside of GetIt
   _i174.GetIt init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
   }) {
-    final gh = _i526.GetItHelper(
-      this,
-      environment,
-      environmentFilter,
-    );
+    final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final apiModule = _$ApiModule();
     gh.singleton<_i361.Dio>(() => apiModule.provideDio());
     gh.factory<_i803.ApiClient>(() => _i803.ApiClient(gh<_i361.Dio>()));
     gh.factory<_i581.ProductsRemoteDataSource>(
-        () => _i196.ProductsRemoteDataSourceImpl(gh<_i803.ApiClient>()));
+      () => _i196.ProductsRemoteDataSourceImpl(gh<_i803.ApiClient>()),
+    );
     gh.factory<_i903.CategoriesRemoteDataSource>(
-        () => _i35.CategoriesRemoteDataSourceImpl(gh<_i803.ApiClient>()));
+      () => _i35.CategoriesRemoteDataSourceImpl(gh<_i803.ApiClient>()),
+    );
     gh.factory<_i1000.BrandsRemoteDataSource>(
-        () => _i291.BrandsRemoteDataSourceImpl(gh<_i803.ApiClient>()));
+      () => _i291.BrandsRemoteDataSourceImpl(gh<_i803.ApiClient>()),
+    );
     gh.factory<_i116.BrandsRepoImpl>(
-        () => _i116.BrandsRepoImpl(gh<_i1000.BrandsRemoteDataSource>()));
+      () => _i116.BrandsRepoImpl(gh<_i1000.BrandsRemoteDataSource>()),
+    );
     gh.factory<_i583.ProductsRepo>(
-        () => _i952.ProductsRepoImpl(gh<_i581.ProductsRemoteDataSource>()));
+      () => _i952.ProductsRepoImpl(gh<_i581.ProductsRemoteDataSource>()),
+    );
     gh.factory<_i90.Categoriesrepo>(
-        () => _i455.CategoriesRepoImpl(gh<_i903.CategoriesRemoteDataSource>()));
+      () => _i455.CategoriesRepoImpl(gh<_i903.CategoriesRemoteDataSource>()),
+    );
     gh.factory<_i517.GetCategoriesUseCase>(
-        () => _i517.GetCategoriesUseCase(gh<_i90.Categoriesrepo>()));
-    gh.factory<_i712.GetNewArrivalsUseCase>(
-        () => _i712.GetNewArrivalsUseCase(gh<_i583.ProductsRepo>()));
-    gh.factory<_i700.GetProductsByCategoryIdUseCase>(
-        () => _i700.GetProductsByCategoryIdUseCase(gh<_i583.ProductsRepo>()));
+      () => _i517.GetCategoriesUseCase(gh<_i90.Categoriesrepo>()),
+    );
     gh.factory<_i721.GetMostSellingProducts>(
-        () => _i721.GetMostSellingProducts(gh<_i583.ProductsRepo>()));
-    gh.factory<_i964.HomeViewModel>(() => _i964.HomeViewModel(
-          gh<_i517.GetCategoriesUseCase>(),
-          gh<_i700.GetProductsByCategoryIdUseCase>(),
-          gh<_i712.GetNewArrivalsUseCase>(),
-          gh<_i721.GetMostSellingProducts>(),
-        ));
+      () => _i721.GetMostSellingProducts(gh<_i583.ProductsRepo>()),
+    );
+    gh.factory<_i712.GetNewArrivalsUseCase>(
+      () => _i712.GetNewArrivalsUseCase(gh<_i583.ProductsRepo>()),
+    );
+    gh.factory<_i700.GetProductsByCategoryIdUseCase>(
+      () => _i700.GetProductsByCategoryIdUseCase(gh<_i583.ProductsRepo>()),
+    );
+    gh.factory<_i964.HomeViewModel>(
+      () => _i964.HomeViewModel(
+        gh<_i517.GetCategoriesUseCase>(),
+        gh<_i700.GetProductsByCategoryIdUseCase>(),
+        gh<_i712.GetNewArrivalsUseCase>(),
+        gh<_i721.GetMostSellingProducts>(),
+      ),
+    );
     return this;
   }
 }

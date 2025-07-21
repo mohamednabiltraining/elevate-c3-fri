@@ -1,3 +1,4 @@
+import 'package:c3_offline/api/client/api_result.dart';
 import 'package:c3_offline/data/dataSource/BrandsRemoteDataSource.dart';
 import 'package:c3_offline/domain/model/brand.dart';
 import 'package:c3_offline/domain/respositories/BrandsRepo.dart';
@@ -11,7 +12,7 @@ class BrandsRepoImpl implements Brandsrepo{
   BrandsRepoImpl(this._remoteDataSource);
 
   @override
-  Future<List<Brand>> getBrands(
+  Future<Result<List<Brand>>> getBrands(
       {
         int limit = 10,
         int page = 1,

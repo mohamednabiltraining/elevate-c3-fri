@@ -1,3 +1,4 @@
+import 'package:c3_offline/api/client/api_result.dart';
 import 'package:c3_offline/data/dataSource/ProductsRemoteDataSource.dart';
 import 'package:c3_offline/domain/model/SortFields.dart';
 import 'package:c3_offline/domain/model/product.dart';
@@ -11,7 +12,7 @@ class ProductsRepoImpl implements ProductsRepo{
   ProductsRepoImpl(this._remoteDataSource);
 
   @override
-  Future<List<Product>> getProducts(
+  Future<Result<List<Product>>> getProducts(
       {
         int limit = 10,
         int page = 1,

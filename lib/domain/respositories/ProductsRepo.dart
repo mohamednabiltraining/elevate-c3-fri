@@ -1,8 +1,9 @@
+import 'package:c3_offline/api/client/api_result.dart';
 import 'package:c3_offline/domain/model/SortFields.dart';
 import 'package:c3_offline/domain/model/product.dart';
 
 abstract class ProductsRepo{
-  Future<List<Product>> getProducts(
+  Future<Result<List<Product>>> getProducts(
       {
         int limit = 10,
         int page = 1,

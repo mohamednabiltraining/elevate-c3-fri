@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:c3_offline/di.dart';
+import 'package:c3_offline/presentation/common/BaseState.dart';
 import 'package:c3_offline/presentation/common/HorizontalCategoriesGrid.dart';
 import 'package:c3_offline/presentation/common/HorizontalProductsView.dart';
+import 'package:c3_offline/presentation/home/HomeContract.dart';
 import 'package:c3_offline/presentation/home/home_viewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,44 +29,17 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text("Home Screen"),
       ),
-      body: BlocConsumer<HomeViewModel,HomeState>(
+      body: BlocBuilder<HomeViewModel,HomeState>(
         bloc: homeViewModel,
         builder: (context, state) {
           switch(state){
             case HomeSuccessState():{
               return _buildSuccessState(state);
             }
-            case HomeErrorState():{
-              return _buildErrorState(state);
-            }
-            case HomeInitialState():{
-              return _buildLoadingState(state);
-            }
             default:{
-              throw Exception("Unknown state");
+              return Center(child: CircularProgressIndicator());
             }
           }
-        },
-        listener: (context, state) {
-          if(state is ShowDialog){
-            showDialog(context: context, builder: (context) {
-              return AlertDialog(
-                title: Text(state.message),
-              );
-            });
-          }
-        },
-        listenWhen: (previous, current) {
-          if(current is ShowDialog){
-            return true;
-          }
-          return false;
-        },
-        buildWhen: (previous, current) {
-         if(current is ShowDialog){
-           return false;
-         }
-         return true;
         },
 
 
@@ -76,43 +51,33 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Visibility(
-            visible: state.categories?.isNotEmpty == true,
-            child: Container(
+          SizedBox(
               height: 220,
-              child: HorizontalCategoriesGrid(
-                categories: state.categories ??[]
-              ),
-            ),
-          ),
-          Visibility(
-            visible: state.newArrivals?.isNotEmpty == true,
-            child: Container(
+              child: state.categoriesState.isLoading == false ?
+              HorizontalCategoriesGrid(
+                categories: state.categoriesState.data??[]
+              ):
+          Center(child: CircularProgressIndicator())
+              )
+          , SizedBox(
               height: 220,
-              child: HorizontalProductsView(
-                products: state.newArrivals??[]
+              child: state.newArrivalsState.isLoading == false ?
+              HorizontalProductsView(
+                products: state.newArrivalsState.data??[]
+              ):
+          Center(child: CircularProgressIndicator())
               ),
-            ),
-          ),
-          Container(
-            height: 220,
-            child: Visibility(
-              visible: state.mostSelling?.isNotEmpty == true,
-              child: HorizontalProductsView(
-                products: state.mostSelling??[]
-              ),
-            ),
+          SizedBox(
+              height: 220,
+              child: state.mostSellingState.isLoading == false ?
+              HorizontalProductsView(
+                  products: state.mostSellingState.data??[]
+              ):
+              Center(child: CircularProgressIndicator())
           )
+
           ]
       ),
     );
-  }
-
-  Widget _buildErrorState(HomeErrorState state) {
-    return Text(state.message ?? "Something went Wrong");
-  }
-
-  Widget _buildLoadingState(HomeInitialState state) {
-    return Center(child: CircularProgressIndicator());
   }
 }
