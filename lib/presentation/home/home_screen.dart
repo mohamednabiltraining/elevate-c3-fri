@@ -1,9 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:c3_offline/di.dart';
-import 'package:c3_offline/presentation/common/BaseState.dart';
 import 'package:c3_offline/presentation/common/HorizontalCategoriesGrid.dart';
 import 'package:c3_offline/presentation/common/HorizontalProductsView.dart';
-import 'package:c3_offline/presentation/home/HomeContract.dart';
 import 'package:c3_offline/presentation/home/home_viewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
         bloc: homeViewModel,
         builder: (context, state) {
           switch(state){
-            case HomeSuccessState():{
+            case HomeState():{
               return _buildSuccessState(state);
             }
             default:{
@@ -47,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSuccessState(HomeSuccessState state) {
+  Widget _buildSuccessState(HomeState state) {
     return SingleChildScrollView(
       child: Column(
         children: [

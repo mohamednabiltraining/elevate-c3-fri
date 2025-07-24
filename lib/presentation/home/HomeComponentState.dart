@@ -1,6 +1,7 @@
 import 'package:c3_offline/api/client/api_result.dart';
+import 'package:equatable/equatable.dart';
 
-class HomeComponentState<T>{
+class HomeComponentState<T> extends Equatable {
   final bool isLoading;
   final T? data;
   final Failure? failure;
@@ -9,6 +10,9 @@ class HomeComponentState<T>{
     this.data,
     this.failure
 });
+
+  @override
+  List<Object?> get props => [isLoading, data, failure];
 
   HomeComponentState<T> copyWith({
     bool? isLoading,

@@ -7,7 +7,7 @@ import 'package:c3_offline/domain/usecase/GetMostSellingProducts.dart';
 import 'package:c3_offline/domain/usecase/GetNewArrivalProducts.dart';
 import 'package:c3_offline/domain/usecase/GetProductsByCategoryId.dart';
 import 'package:c3_offline/presentation/home/HomeComponentState.dart';
-import 'package:c3_offline/presentation/home/HomeContract.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -16,7 +16,7 @@ class HomeViewModel extends Cubit<HomeState> {
   GetProductsByCategoryIdUseCase getProductsByCategoryIdUseCase;
   GetNewArrivalsUseCase getNewArrivalsUseCase;
   GetMostSellingProducts getMostSellingProducts;
-  HomeSuccessState state = HomeSuccessState();
+  HomeState state = HomeState();
 
   HomeViewModel(
     this.getCategoriesUseCase,
@@ -28,7 +28,7 @@ class HomeViewModel extends Cubit<HomeState> {
   // @override
   // ValueNotifier<BaseAction?> events = ValueNotifier<BaseAction?>(null); // Implement your event stream if needed
   //
-  doIntent(HomeIntent intent) {
+  void doIntent(HomeIntent intent) {
     switch (intent) {
       case HomeRefreshIntent():
         _loadHome();
@@ -45,18 +45,23 @@ class HomeViewModel extends Cubit<HomeState> {
   Future<void> _loadHome() async {
 
     // events.value = NavigationAction("home");
-
+    emit(state.copyWith(
+        categories: state.categoriesState.copyWith(
+            isLoading: true
+        ),
+        newArrivals: state.newArrivalsState.copyWith(
+            isLoading: true
+        ),
+        mostSelling: state.mostSellingState.copyWith(
+            isLoading: true
+        )
+    ));
     _loadCategories();
     _loadMostSelling();
     _loadNewArrivals();
   }
 
   Future<void> _loadCategories() async {
-    emit(state.copyWith(
-        categories: state.categoriesState.copyWith(
-            isLoading: true
-        )
-    ));
     var categories = await getCategoriesUseCase.invoke();
 
     switch (categories) {
@@ -81,11 +86,7 @@ class HomeViewModel extends Cubit<HomeState> {
   }
 
   Future<void> _loadNewArrivals() async {
-    emit(state.copyWith(
-      newArrivals: state.newArrivalsState.copyWith(
-        isLoading: true
-      )
-    ));
+
     var newArrivals = await getNewArrivalsUseCase.invoke();
     switch(newArrivals){
       case Success():{
@@ -106,11 +107,7 @@ class HomeViewModel extends Cubit<HomeState> {
   }
 
   Future<void> _loadMostSelling() async {
-    emit(state.copyWith(
-      mostSelling: state.mostSellingState.copyWith(
-        isLoading: true
-      )
-    ));
+
     var result = await getMostSellingProducts.invoke();
 
     switch(result){
@@ -134,30 +131,41 @@ class HomeViewModel extends Cubit<HomeState> {
   }
 }
 
-class HomeSuccessState extends HomeState{
+class HomeState extends Equatable{
   HomeComponentState<List<Category>?> categoriesState;
   HomeComponentState<List<Product>?> newArrivalsState;
   HomeComponentState<List<Product>?> mostSellingState;
 
-  HomeSuccessState({
+  @override
+  List<Object?> get props => [
+    categoriesState,
+    newArrivalsState,
+    mostSellingState,
+  ];
+
+  HomeState({
     this.categoriesState = const HomeComponentState<List<Category>?>(),
     this.newArrivalsState = const HomeComponentState<List<Product>?>(),
     this.mostSellingState = const HomeComponentState<List<Product>?>(),
   });
 
-  HomeSuccessState copyWith({
+  HomeState copyWith({
     HomeComponentState<List<Category>?>? categories,
     HomeComponentState<List<Product>?>? newArrivals,
     HomeComponentState<List<Product>?>? mostSelling,
   }) {
-    return HomeSuccessState(
+    return HomeState(
       categoriesState: categories ?? this.categoriesState,
       newArrivalsState: newArrivals ?? this.newArrivalsState,
       mostSellingState: mostSelling ?? this.mostSellingState,
     );
   }
+
+  @override
+  bool? get stringify => true;
 }
 
+sealed class HomeIntent {}
 class HomeRefreshIntent extends HomeIntent {}
 
 class OnProductClickIntent extends HomeIntent {

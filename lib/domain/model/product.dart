@@ -1,8 +1,9 @@
 import 'package:c3_offline/domain/model/brand.dart';
 import 'package:c3_offline/domain/model/category.dart';
+import 'package:equatable/equatable.dart';
 
 
-class Product {
+class Product extends Equatable{
   final int? sold;
   final List<String>? images;
   final List<Category>? subcategory;
@@ -21,6 +22,10 @@ class Product {
   final String? updatedAt;
   final String? id;
 
+  @override
+  get props => [
+   id
+  ];
   Product ({
     this.sold,
     this.images,
